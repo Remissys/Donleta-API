@@ -8,7 +8,7 @@ urlpatterns = [
     path('characters/', views.Characterview.as_view(), name='characters-view'),
     path('character/<str:id>/', views.CharacterSingleView.as_view(), name='character-single-view'),
 
-    path('bossess/', views.Bossview.as_view(), name='bosses-view'),
+    path('bosses/', views.Bossview.as_view(), name='bosses-view'),
     path('boss/<str:id>/', views.BossSingleView.as_view(), name='boss-single-view'),
 
     path('participants/', views.Participant.as_view(), name='participants-view'),
