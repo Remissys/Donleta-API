@@ -38,6 +38,10 @@ class CharactersService:
         return CharactersRepository().update_character(character=character, _id=id)
     
     @staticmethod
+    def update_many(characters_list: list[dict]):
+        CharactersRepository().update_many(characters_list)
+    
+    @staticmethod
     def delete_character(id: str):
         character = CharactersRepository().get_character_by_id(_id=id)
         if not character:

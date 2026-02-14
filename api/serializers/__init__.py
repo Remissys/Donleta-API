@@ -1,6 +1,6 @@
 from .runs import *
 from .characters import *
-from .bossess import *
+from .bosses import *
 from .participant import *
 from .runs import *
 from .time import *

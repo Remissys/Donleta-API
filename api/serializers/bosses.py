@@ -1,18 +1,16 @@
 from rest_framework import serializers
 
-class CharactersSerializer(serializers.Serializer):
+class BossesSerializer(serializers.Serializer):
     _id = serializers.CharField()
     name = serializers.CharField()
-    element = serializers.IntegerField()
     score = serializers.IntegerField()
     image_key = serializers.CharField()
 
-class CharacterCreateSerializer(serializers.Serializer):
+class BossesCreateSerializer(serializers.Serializer):
     name = serializers.CharField()
-    element = serializers.IntegerField()
     score = serializers.IntegerField()
     image_key = serializers.CharField()
 
-class CharacterUpdateSerializer(serializers.Serializer):
+class BossUpdateSerializer(serializers.Serializer):
     _id = serializers.CharField()
     score = serializers.IntegerField()

@@ -2,6 +2,7 @@ from core.mongo import db
 from datetime import datetime
 from bson import ObjectId
 from pymongo.collection import ReturnDocument
+from pymongo import UpdateOne
 
 class CharactersRepository:
     def __init__(self):
@@ -37,6 +38,20 @@ class CharactersRepository:
         )
 
         return result
+    
+    def update_many(self, characters_list: list[dict]) -> list[dict]:
+        operations = []
+
+        for char in characters_list:
+            operations.append(
+                UpdateOne(
+                    {"_id": ObjectId(char["_id"])},
+                    {"$set": {"score": char["score"]}}
+                )
+            )
+
+        if operations:
+            self.collection.bulk_write(operations)
     
     def delete_character(self, _id: str):
         result = self.collection.delete_one({"_id": ObjectId(_id)})

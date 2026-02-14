@@ -1,22 +1,22 @@
-from ..repositories import BossessRepository
+from ..repositories import BossesRepository
 
-class BossessService:
+class BossesService:
 
     @staticmethod
     def get_boss(id: str):
-        return BossessRepository().get_boss_by_id(_id=id)
+        return BossesRepository().get_boss_by_id(_id=id)
     
     @staticmethod
-    def list_bossess():
-        return BossessRepository().list_bossess()
+    def list_bosses():
+        return BossesRepository().list_bosses()
     
     @staticmethod
     def insert_boss(boss: dict):
-        return BossessRepository().insert_boss(boss=boss)
+        return BossesRepository().insert_boss(boss=boss)
     
     @staticmethod
     def update_boss(boss: dict, id: str):
-        existing_boss = BossessRepository().get_boss_by_id(_id=id)
+        existing_boss = BossesRepository().get_boss_by_id(_id=id)
 
         if not existing_boss:
             raise ValueError("Boss not found")
@@ -35,12 +35,16 @@ class BossessService:
         if not has_changes:
             raise ValueError("No changes detected")
 
-        return BossessRepository().update_boss(boss=boss, _id=id)
+        return BossesRepository().update_boss(boss=boss, _id=id)
+    
+    @staticmethod
+    def update_many(bosses_list: list[dict]):
+        BossesRepository().update_many(bosses_list)
     
     @staticmethod
     def delete_boss(id: str):
-        boss = BossessRepository().get_boss_by_id(_id=id)
+        boss = BossesRepository().get_boss_by_id(_id=id)
         if not boss:
             raise ValueError("Boss not found")
         
-        BossessRepository().delete_boss(_id=id)
+        BossesRepository().delete_boss(_id=id)

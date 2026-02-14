@@ -1,9 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework import status
-
-from api.serializers.characters import CharacterCreateSerializer
 from ..services import CharactersService
-from ..serializers import CharactersSerializer
+from ..serializers import CharactersSerializer, CharacterCreateSerializer, CharacterUpdateSerializer
 from django.http import JsonResponse
 
 class CharacterSingleView(APIView):
@@ -79,3 +77,15 @@ class Characterview(APIView):
         
         except Exception:
             return JsonResponse({"status": False, "message": "Error creating character"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+    def put(self, request):
+        try:
+            data = CharacterUpdateSerializer(data=request.data, many=True)
+            data.is_valid(raise_exception=True)
+
+            CharactersService.update_many(data.validated_data)
+
+            return JsonResponse({"status": True, "message": "Bosses updated successfully"}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return JsonResponse({"status": False, "message": str(e)}, status=status.HTTP_400_BAD_REQUEST)

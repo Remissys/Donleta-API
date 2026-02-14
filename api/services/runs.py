@@ -1,5 +1,5 @@
 from rest_framework.exceptions import ValidationError
-from ..repositories import RunRepository, CharactersRepository, BossessRepository, ParticipantRepository, TimeRepository
+from ..repositories import RunRepository, CharactersRepository, BossesRepository, ParticipantRepository, TimeRepository
 from ..serializers import RunCreateSerializer
 from datetime import datetime
 
@@ -18,7 +18,7 @@ class RunService:
             if not CharactersRepository().get_character_by_id(_id=run["character2"]):
                 raise ValidationError("Invalid Character")
 
-            if not BossessRepository().get_boss_by_id(_id=run["boss"]):
+            if not BossesRepository().get_boss_by_id(_id=run["boss"]):
                 raise ValidationError("Invalid Boss")
             
             if not TimeRepository().get_time_by_id(time_id=run["time"]):
@@ -41,7 +41,7 @@ class RunService:
                 run["character1"],
                 run["character2"]
             ])
-            boss = BossessRepository().get_boss_by_id(run["boss"])
+            boss = BossesRepository().get_boss_by_id(run["boss"])
             time = TimeRepository().get_time_by_id(run["time"])
 
             print('characters: ', characters)
