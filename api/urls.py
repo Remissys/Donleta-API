@@ -19,6 +19,7 @@ urlpatterns = [
 
     path('runs/', views.RunsView.as_view(), name='runs-view'),
     path('run/<str:id>/', views.RunsSingleView.as_view(), name='runs-single-view'),
-    path('runs/weekly/', views.WeeklyRunsView.as_view(), name='weekly-runs-views'),
-    path('runs/monthly/', views.MonthlyRunsView.as_view(), name='monthly-runs-views'),
+    path('runs/daily/', views.DailyRunsView.as_view(), name='daily-runs-view'),
+    path('runs/weekly/', views.WeeklyRunsView.as_view(), name='weekly-runs-view'),
+    path('runs/monthly/', views.MonthlyRunsView.as_view(), name='monthly-runs-view'),
 ]

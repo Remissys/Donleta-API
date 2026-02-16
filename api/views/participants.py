@@ -19,21 +19,21 @@ class Participant(APIView):
             return JsonResponse({"status": False, "message": "Error retrieving participants"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def post(self, request):
-        # try:
-        data = ParticipantCreateSerializer(data=request.data)
-        data.is_valid(raise_exception=True)
+        try:
+            data = ParticipantCreateSerializer(data=request.data)
+            data.is_valid(raise_exception=True)
 
-        participant = ParticipantsService.create_participant(data.validated_data)
+            participant = ParticipantsService.create_participant(data.validated_data)
 
-        serializer = ParticipantSerializer(participant)
+            serializer = ParticipantSerializer(participant)
 
-        return JsonResponse({"status": True, "message": "Participant created successfully", "data": serializer.data}, status=status.HTTP_201_CREATED)
+            return JsonResponse({"status": True, "message": "Participant created successfully", "data": serializer.data}, status=status.HTTP_201_CREATED)
 
-        # except ValueError as e:
-        #     return JsonResponse({"status": False, "message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        except ValueError as e:
+            return JsonResponse({"status": False, "message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         
-        # except Exception:
-        #     return JsonResponse({"status": False, "message": "Error creating participant"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception:
+            return JsonResponse({"status": False, "message": "Error creating participant"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 class ParticipantSingleView(APIView):
     def get(self, request, participant_id: str):

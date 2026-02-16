@@ -24,13 +24,20 @@ class RunRepository:
     def get_daily_runs(self, day: str = None) -> list[dict]:
 
         if day:
-            runs = list(db.runs.find({"date.day": day}))
+            runs = list(db.runs.find({"date.period": day}))
+
+            latest_run = runs[0]
         else:
             latest_run = db.runs.find_one(sort=[("created_at", -1)])
 
-            runs = list(db.runs.find({"date.day": latest_run["date.day"]}))
+            runs = list(db.runs.find({"date.period": latest_run["date"]["period"]}))
 
-        return runs
+        response_data = {
+            "date": latest_run["date"],
+            "runs": runs
+        }
+
+        return response_data
     
     def get_weekly_runs(self, edition: str = None, week: int = None) -> list[dict]:
 
@@ -39,19 +46,46 @@ class RunRepository:
         else:
             latest_run = db.runs.find_one(sort=[("created_at", -1)])
 
-            print('latest_run: ', latest_run)
-
             runs = list(db.runs.find({"date.edition": latest_run["date"]["edition"], "date.week": latest_run["date"]["week"]}))
 
         return runs
     
     def get_monthly_runs(self, edition: str = None) -> list[dict]:
-
-        if edition:
-            runs = list(db.runs.find({"date.edition": edition}))
-        else:
+        if not edition:
             latest_run = db.runs.find_one(sort=[("created_at", -1)])
+            edition = latest_run["date"]["edition"]
 
-            runs = list(db.runs.find({"date.edition": latest_run["date"]["edition"]}))
+        pipeline = [
+            {
+                "$match": {
+                    "date.edition": edition
+                }
+            },
+            {
+                "$group": {
+                    "_id": "$participant._id",
+                    "participant": { "$first": "$participant" },
+                    "scores": { "$push": "$score" }
+                }
+            },
+            {
+                "$project": {
+                    "participant": 1,
+                    "score": {
+                        "$sum": {
+                            "$slice": [
+                                { "$sortArray": { "input": "$scores", "sortBy": -1 } },
+                                2
+                            ]
+                        }
+                    }
+                }
+            },
+            {
+                "$sort": { "score": -1 }
+            }
+        ]
+
+        runs = list(db.runs.aggregate(pipeline))
 
         return runs

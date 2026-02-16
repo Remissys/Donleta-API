@@ -1,6 +1,10 @@
 from rest_framework import serializers
+from ..serializers.bosses import BossesSerializer
+from ..serializers.characters import CharactersSerializer
+from ..serializers.participant import ParticipantSerializer
+from ..serializers.time import TimeSerializer
 
-class RunCreateSerializer(serializers.Serializer):
+class RunDataSerializer(serializers.Serializer):
     participant = serializers.CharField()
     character1 = serializers.CharField()
     character2 = serializers.CharField()
@@ -11,24 +15,11 @@ class RunCreateSerializer(serializers.Serializer):
 class RunGetSerializer(serializers.Serializer):
     _id = serializers.CharField()
     participant = serializers.CharField()
-    character1 = serializers.CharField()
-    character2 = serializers.CharField()
-    boss = serializers.CharField()
-    time = serializers.CharField()
+    characters = CharactersSerializer(many=True)
+    boss = BossesSerializer()
+    time = TimeSerializer()
     victory = serializers.BooleanField()
     score = serializers.IntegerField()
-
-    def to_representation(self, instance):
-        return {
-            "_id": str(instance["_id"]),
-            "participant": instance["participant"]["name"],
-            "character1": instance["characters"][0]["name"] if len(instance["characters"]) > 0 else None,
-            "character2": instance["characters"][1]["name"] if len(instance["characters"]) > 1 else None,
-            "boss": instance["boss"]["name"],
-            "time": instance["time"]["description"],
-            "victory": instance["victory"],
-            "score": instance["score"]
-        }
 
 class RunDateSerializer(serializers.Serializer):
     edition = serializers.CharField()
@@ -37,17 +28,11 @@ class RunDateSerializer(serializers.Serializer):
 
 class RunCreateSerializer(serializers.Serializer):
     date = RunDateSerializer()
-    runs = RunCreateSerializer(many=True)
+    runs = RunDataSerializer(many=True)
 
-class RunSerializer(serializers.Serializer):
+class RunsSerializer(serializers.Serializer):
     date = RunDateSerializer()
     runs = RunGetSerializer(many=True)
-
-    def to_representation(self, instance):
-        return {
-            "date": instance["date"],
-            "runs": RunGetSerializer(instance["runs"], many=True).data
-        }
 
 class SingleRunSerializer(serializers.Serializer):
     date = RunDateSerializer()
@@ -60,5 +45,5 @@ class SingleRunSerializer(serializers.Serializer):
         }
     
 class ScoresRunSerializer(serializers.Serializer):
-    participant = serializers.CharField()
+    participant = ParticipantSerializer()
     score = serializers.IntegerField()

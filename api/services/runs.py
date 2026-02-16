@@ -44,50 +44,52 @@ class RunService:
             boss = BossesRepository().get_boss_by_id(run["boss"])
             time = TimeRepository().get_time_by_id(run["time"])
 
-            print('characters: ', characters)
+            # run_participant = {
+            #     "_id": participant["_id"],
+            #     "name": participant["name"]
+            # }
 
-            run_participant = {
-                "_id": participant["_id"],
-                "name": participant["name"]
-            }
+            # run_characters = [
+            #     {
+            #         "_id": char["_id"],
+            #         "name": char["name"],
+            #         "element": char["element"],
+            #         "score": char["score"]
+            #     }
+            #     for char in characters
+            # ]
 
-            run_characters = [
-                {
-                    "_id": char["_id"],
-                    "name": char["name"],
-                    "element": char["element"],
-                    "score": char["score"]
-                }
-                for char in characters
-            ]
+            # run_boss = {
+            #     "_id": boss["_id"],
+            #     "name": boss["name"],
+            #     "score": boss["score"]
+            # }
 
-            run_boss = {
-                "_id": boss["_id"],
-                "name": boss["name"],
-                "score": boss["score"]
-            }
+            # run_time = {
+            #     "_id": time["_id"],
+            #     "description": time["description"],
+            #     "score": time["score"]
+            # }
 
-            run_time = {
-                "_id": time["_id"],
-                "description": time["description"],
-                "score": time["score"]
-            }
-
-            if run["victory"] == "1":
+            if run["victory"] == "true":
                 score = (
-                    run_characters[0]["score"] + 
-                    run_characters[1]["score"] + 
-                    run_boss["score"] +
-                    run_time["score"]
+                    # run_characters[0]["score"] + 
+                    # run_characters[1]["score"] + 
+                    # run_boss["score"] +
+                    # run_time["score"]
+                    characters[0]["score"] + 
+                    characters[1]["score"] + 
+                    boss["score"] +
+                    time["score"]
                 )
             else:
                 score = 0     
 
             runs.append({
-                "participant": run_participant,
-                "characters": run_characters,
-                "boss": run_boss,
-                "time": run_time,
+                "participant": participant,
+                "characters": characters,
+                "boss": boss,
+                "time": time,
                 "victory": run["victory"] == "true", # converts string to boolean
                 "score": score,
                 "date": payload["date"],
