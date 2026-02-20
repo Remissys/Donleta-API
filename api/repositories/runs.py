@@ -40,15 +40,28 @@ class RunRepository:
         return response_data
     
     def get_weekly_runs(self, edition: str = None, week: int = None) -> list[dict]:
-
-        if edition and week:
-            runs = list(db.runs.find({"date.edition": edition, "date.week": week}))
-        else:
+        if not (edition and week):
             latest_run = db.runs.find_one(sort=[("created_at", -1)])
+            edition = latest_run["date"]["edition"]
+            week = latest_run["date"]["week"]
 
-            runs = list(db.runs.find({"date.edition": latest_run["date"]["edition"], "date.week": latest_run["date"]["week"]}))
+        pipeline = [
+            {
+                "$match": {
+                    "date.edition": edition,
+                    "date.week": week
+                }
+            },
+            {
+                "$group": {
+                    "_id": "$participant._id",
+                    "participant": { "$first": "$participant" },
+                    "scores": { "$push": "$score" }
+                }
+            }
+        ]
 
-        return runs
+        return list(db.runs.aggregate(pipeline))
     
     def get_monthly_runs(self, edition: str = None) -> list[dict]:
         if not edition:
@@ -86,6 +99,4 @@ class RunRepository:
             }
         ]
 
-        runs = list(db.runs.aggregate(pipeline))
-
-        return runs
+        return list(db.runs.aggregate(pipeline))

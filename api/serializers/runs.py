@@ -14,7 +14,7 @@ class RunDataSerializer(serializers.Serializer):
 
 class RunGetSerializer(serializers.Serializer):
     _id = serializers.CharField()
-    participant = serializers.CharField()
+    participant = ParticipantSerializer()
     characters = CharactersSerializer(many=True)
     boss = BossesSerializer()
     time = TimeSerializer()
@@ -47,3 +47,7 @@ class SingleRunSerializer(serializers.Serializer):
 class ScoresRunSerializer(serializers.Serializer):
     participant = ParticipantSerializer()
     score = serializers.IntegerField()
+
+class WeeklyRunsSerializer(serializers.Serializer):
+    participant = ParticipantSerializer()
+    scores = serializers.ListField(child=serializers.IntegerField())
