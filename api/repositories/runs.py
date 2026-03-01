@@ -99,4 +99,9 @@ class RunRepository:
             }
         ]
 
-        return list(db.runs.aggregate(pipeline))
+        rankings = list(db.runs.aggregate(pipeline))
+
+        return {
+            "edition": edition,
+            "rankings": rankings
+        }

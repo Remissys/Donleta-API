@@ -48,6 +48,10 @@ class ScoresRunSerializer(serializers.Serializer):
     participant = ParticipantSerializer()
     score = serializers.IntegerField()
 
+class MonthlyRankingsSerializer(serializers.Serializer):
+    edition = serializers.CharField()
+    rankings = ScoresRunSerializer(many=True)
+
 class WeeklyRunsSerializer(serializers.Serializer):
     participant = ParticipantSerializer()
     scores = serializers.ListField(child=serializers.IntegerField())

@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework import status
 from ..services import RunService
-from ..serializers import RunCreateSerializer, SingleRunSerializer, ScoresRunSerializer, WeeklyRunsSerializer, RunsSerializer
+from ..serializers import RunCreateSerializer, SingleRunSerializer, MonthlyRankingsSerializer, WeeklyRunsSerializer, RunsSerializer
 from django.http import JsonResponse
 
 class RunsView(APIView):
@@ -68,7 +68,7 @@ class MonthlyRunsView(APIView):
 
             runs = RunService.get_monthly_runs(edition)
 
-            serializers = ScoresRunSerializer(runs, many=True)
+            serializers = MonthlyRankingsSerializer(runs)
 
             return JsonResponse({"status": True, "message": "Monthly runs retrieved successfully", "data": serializers.data}, status=status.HTTP_200_OK)
 
