@@ -4,3 +4,4 @@ from .images import *
 from .bosses import *
 from .participants import *
 from .time import *
+from .auth_user import *

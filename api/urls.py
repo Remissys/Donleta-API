@@ -2,6 +2,9 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    path("login/", views.LoginView.as_view(), name="login-view"),
+    path("token/refresh/", views.RefreshTokenView.as_view(), name="refresh-token-view"),
+
     path('image/', views.ImageUploadView.as_view(), name='image-upload-view'),
     path('image/<str:file_id>/', views.ImageView.as_view(), name='image-view'),
 
